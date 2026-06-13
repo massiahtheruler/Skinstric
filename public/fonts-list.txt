@@ -1,0 +1,3 @@
+public/fonts/RoobertTRIAL-Regular.woff2
+public/fonts/RoobertTRIAL-Medium.woff2
+public/fonts/RoobertTRIAL-SemiBold.woff2
