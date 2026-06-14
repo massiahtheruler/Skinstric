@@ -13,14 +13,17 @@ export default function SubmitPage() {
           <Rectangle
             className="diamond-stack__line diamond-stack__line--one"
             dashed
+            dashPattern="4 8"
           />
           <Rectangle
             className="diamond-stack__line diamond-stack__line--two"
             dashed
+            dashPattern="4 8"
           />
           <Rectangle
             className="diamond-stack__line diamond-stack__line--three"
             dashed
+            dashPattern="4 8"
           />
         </div>{" "}
         <div className="submit__input-container">

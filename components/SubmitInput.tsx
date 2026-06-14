@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import DiamondButton from "./DiamondButton";
 
 const submitSteps = [
   { label: "CLICK TO TYPE", placeholder: "Introduce Yourself" },
@@ -13,9 +12,7 @@ export default function SubmitInput() {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [inputValue, setInputValue] = useState("");
-  const [status, setStatus] = useState<"typing" | "processing" | "complete">(
-    "typing",
-  );
+  const [status, setStatus] = useState<"typing" | "processing">("typing");
   const answersRef = useRef<string[]>([]);
 
   const currentStep = submitSteps[step];
@@ -24,11 +21,11 @@ export default function SubmitInput() {
     if (status !== "processing") return;
 
     const processingTimer = window.setTimeout(() => {
-      setStatus("complete");
+      router.push("/analysis");
     }, 1600);
 
     return () => window.clearTimeout(processingTimer);
-  }, [status]);
+  }, [router, status]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,23 +53,6 @@ export default function SubmitInput() {
           <span />
           <span />
         </div>
-      </div>
-    );
-  }
-
-  if (status === "complete") {
-    return (
-      <div className="submit__input-complete" aria-live="polite">
-        <p className="input__eyebrow">THANK YOU!</p>
-        <h1 className="submit__input-message">Proceed for the next step</h1>
-        <DiamondButton
-          type="button"
-          className="submit__proceed-button"
-          iconSide="right"
-          onClick={() => router.push("/analyzing")}
-        >
-          PROCEED
-        </DiamondButton>
       </div>
     );
   }

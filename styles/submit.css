@@ -119,7 +119,8 @@
   position: absolute;
   left: 32px;
   bottom: 32px;
-  transform: scale(1.6);
+  transform: scale(1.35);
+  transform-origin: bottom left;
   font-size: 12px;
   gap: 8px;
 }
@@ -129,7 +130,9 @@
   right: 32px;
   bottom: 32px;
   width: auto;
-  gap: 16px;
+  gap: 10px;
+  transform: scale(1.2);
+  transform-origin: bottom right;
   color: rgba(26, 27, 28, 1);
 }
 
@@ -141,9 +144,6 @@
 
 .submit__diamond-stack .diamond-stack__line {
   --diamond-scale: 0.7;
-  border-width: 2px;
-  border-style: dashed;
-  color: rgba(160, 164, 171, 1);
 }
 
 .submit__diamond-stack .diamond-stack__line--two {

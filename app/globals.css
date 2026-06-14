@@ -5,6 +5,8 @@
 @import "../styles/components/diamond-button.css";
 @import "../styles/home.css";
 @import "../styles/submit.css";
+@import "../styles/analysis.css";
+@import "../styles/results.css";
 
 /* .devOverlay {
   position: fixed;
