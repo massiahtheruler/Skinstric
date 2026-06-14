@@ -1,15 +1,12 @@
 @import "tailwindcss";
+@import "../styles/global.css";
+@import "../styles/components/header.css";
+@import "../styles/components/diamond.css";
+@import "../styles/components/diamond-button.css";
+@import "../styles/home.css";
+@import "../styles/submit.css";
 
-:root {
-  background: rgba(252, 252, 252, 1);
-  color: rgba(26, 27, 28, 1);
-}
-
-body {
-  font-family: var(--font-roobert), Arial, Helvetica, sans-serif;
-}
-
-.devOverlay {
+/* .devOverlay {
   position: fixed;
   inset: 0;
   background-image: url("/skinstric-assets/home/homescreenp.png");
@@ -19,46 +16,4 @@ body {
   pointer-events: none;
   z-index: 9999;
   background-size: 100% 100%;
-}
-
-/* .home {}
-.home__header {}
-.home__brand {}
- */
-.home__intro {
-  width: 60px;
-  height: 17px;
-  top: 23px;
-  left: 117px;
-  position: absolute;
-  opacity: 0.6;
-}
-.home__logo {
-  font-weight: 600;
-  font-style: bold;
-  font-size: 14px;
-  line-height: 16px;
-  letter-spacing: -2%;
-  text-transform: uppercase;
-  width: 69px;
-  height: 16px;
-  top: 23px;
-  left: 32px;
-  opacity: 1;
-  position: absolute;
-}
-
-.home__title {
-  font-weight: 300;
-  font-style: normal;
-  font-size: 128px;
-  line-height: 120px;
-  letter-spacing: -10.5px;
-  text-align: center;
-  width: 680px;
-  height: 240px;
-  top: 368px;
-  left: 616px;
-  opacity: 1;
-  position: absolute;
-}
+} */

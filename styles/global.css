@@ -1,0 +1,9 @@
+:root {
+  background: rgba(252, 252, 252, 1);
+  color: rgba(26, 27, 28, 1);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-roobert), Arial, Helvetica, sans-serif;
+}

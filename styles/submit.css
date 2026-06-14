@@ -1,0 +1,200 @@
+.submit {
+  position: relative;
+  min-height: 100vh;
+}
+
+.submit__eyebrow {
+  position: absolute;
+  top: 84px;
+  left: 32px;
+  font-weight: 600;
+  font-style: Bold;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -2%;
+  text-transform: uppercase;
+  width: 240px;
+  height: 24px;
+}
+
+.input__eyebrow {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  width: 200px;
+  height: 24px;
+  color: rgba(26, 27, 28, 1);
+  opacity: 0.4;
+}
+
+.submit__input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+}
+
+.submit__input-form,
+.submit__input-complete,
+.submit__input-processing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.submit__input {
+  font-weight: 400;
+  font-size: 60px;
+  line-height: 64px;
+  letter-spacing: -4.2px;
+  text-align: center;
+  text-decoration: underline 1px;
+  text-underline-offset: 10px;
+  background: transparent;
+  border: 0;
+  color: rgba(26, 27, 28, 1);
+}
+
+.submit__input::placeholder {
+  color: rgb(121, 121, 121);
+  opacity: 1;
+}
+
+.submit__input::after {
+  height: 2px;
+  padding: 2px;
+}
+
+.submit__input:focus {
+  outline: none;
+}
+
+.submit__input:active {
+  border-color: rgba(252, 252, 252, 1);
+}
+
+.submit__input-message {
+  margin-top: 16px;
+  font-weight: 400;
+  font-size: 60px;
+  line-height: 64px;
+  letter-spacing: -4.2px;
+  text-align: center;
+  color: rgb(126, 127, 129);
+}
+
+.submit__processing-text {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  color: rgb(126, 127, 129);
+}
+
+.submit__processing-dots {
+  display: flex;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.submit__processing-dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(160, 164, 171, 0.75);
+  animation: submitDotBounce 900ms ease-in-out infinite;
+}
+
+.submit__processing-dots span:nth-child(2) {
+  animation-delay: 140ms;
+}
+
+.submit__processing-dots span:nth-child(3) {
+  animation-delay: 280ms;
+}
+
+.submit__back-button {
+  position: absolute;
+  left: 32px;
+  bottom: 32px;
+  transform: scale(1.6);
+  font-size: 12px;
+  gap: 8px;
+}
+
+.submit__proceed-button {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  width: auto;
+  gap: 16px;
+  color: rgba(26, 27, 28, 1);
+}
+
+.submit__input .submit__diamond-stack {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.submit__diamond-stack .diamond-stack__line {
+  --diamond-scale: 0.7;
+  border-width: 2px;
+  border-style: dashed;
+  color: rgba(160, 164, 171, 1);
+}
+
+.submit__diamond-stack .diamond-stack__line--two {
+  opacity: 0.45;
+  --diamond-scale: 0.82;
+}
+
+.submit__diamond-stack .diamond-stack__line--three {
+  opacity: 0.24;
+  --diamond-scale: 0.95;
+}
+
+.submit__diamond-stack > * {
+  animation-name: submitDiamondRotate;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  transform-origin: center;
+}
+
+.submit__diamond-stack > *:nth-child(1) {
+  animation-duration: 32s;
+}
+
+.submit__diamond-stack > *:nth-child(2) {
+  animation-duration: 40s;
+}
+
+.submit__diamond-stack > *:nth-child(3) {
+  animation-duration: 64s;
+}
+
+@keyframes submitDiamondRotate {
+  from {
+    transform: rotate(45deg) scale(var(--diamond-scale));
+  }
+
+  to {
+    transform: rotate(405deg) scale(var(--diamond-scale));
+  }
+}
+
+@keyframes submitDotBounce {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+
+  40% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}

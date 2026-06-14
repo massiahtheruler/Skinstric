@@ -1,0 +1,25 @@
+.diamond-stack {
+  position: absolute;
+  width: 602px;
+  height: 602px;
+  pointer-events: none;
+  font-size: 2px;
+}
+
+.diamond-stack__line {
+  position: absolute;
+  inset: 0;
+  width: 602px;
+  height: 602px;
+  transform: rotate(45deg);
+  transform-origin: center;
+}
+
+.diamond-stack__line--one {
+  opacity: 1;
+}
+
+.diamond-stack__line--two,
+.diamond-stack__line--three {
+  opacity: 0;
+}

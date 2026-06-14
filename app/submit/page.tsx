@@ -1,15 +1,33 @@
+import BackButton from "@/components/BackButton";
+import Header from "@/components/Header";
+import Rectangle from "@/components/Rectangle";
+import SubmitInput from "@/components/SubmitInput";
+
 export default function SubmitPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
-      <p className="text-sm font-medium uppercase tracking-[0.2em] text-zinc-500">
-        Skinstric
-      </p>
-      <h1 className="mt-4 text-3xl font-semibold text-zinc-950">
-        Submit your skin details
-      </h1>
-      <p className="mt-3 max-w-md text-zinc-600">
-        This page is ready for your intake form and image upload flow.
-      </p>
-    </main>
+    <div className="submit">
+      <Header showCodeButton={true} />
+      <p className="submit__eyebrow">TO START YOUR ANALYSIS</p>
+      <main className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
+        <div className="diamond-stack submit__diamond-stack">
+          <Rectangle
+            className="diamond-stack__line diamond-stack__line--one"
+            dashed
+          />
+          <Rectangle
+            className="diamond-stack__line diamond-stack__line--two"
+            dashed
+          />
+          <Rectangle
+            className="diamond-stack__line diamond-stack__line--three"
+            dashed
+          />
+        </div>{" "}
+        <div className="submit__input-container">
+          <SubmitInput />
+        </div>
+      </main>
+      <BackButton className="submit__back-button" />
+    </div>
   );
 }
