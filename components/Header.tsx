@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type HeaderProps = {
   showCodeButton?: boolean;
 };
@@ -6,7 +8,9 @@ export default function Header({ showCodeButton = true }: HeaderProps) {
   return (
     <header className="site-header">
       <div className="site-header__brand">
-        <span className="site-header__logo">SKINSTRIC</span>
+        <Link className="site-header__logo" href="/">
+          SKINSTRIC
+        </Link>
         <span className="site-header__intro">[ INTRO ]</span>
       </div>
 

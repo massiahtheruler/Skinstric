@@ -64,7 +64,7 @@ export default function UploadPanel() {
     if (status !== "preparing") return;
 
     const timer = window.setTimeout(() => {
-      router.push("/results");
+      router.push("/testing");
     }, 2000);
 
     return () => window.clearTimeout(timer);

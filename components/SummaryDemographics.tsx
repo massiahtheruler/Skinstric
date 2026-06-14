@@ -1,6 +1,7 @@
 "use client";
 
 import { type CSSProperties, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type CategoryId = "race" | "age" | "sex";
 
@@ -86,6 +87,7 @@ function getHeroTitle(categoryId: CategoryId, label: string) {
 }
 
 export default function SummaryDemographics() {
+  const router = useRouter();
   const [activeCategoryId, setActiveCategoryId] = useState<CategoryId>("race");
   const [selections, setSelections] =
     useState<Record<CategoryId, string>>(INITIAL_SELECTIONS);
@@ -228,11 +230,16 @@ export default function SummaryDemographics() {
         className="reset"
         id="reset__button"
         type="button"
-        onClick={handleReset}
+        onClick={() => router.push("/analysis")}
       >
         RESET
       </button>
-      <button className="confirm" id="confirm__button" type="button">
+      <button
+        className="confirm"
+        id="confirm__button"
+        type="button"
+        onClick={() => router.push("/")}
+      >
         HOME
       </button>
     </>

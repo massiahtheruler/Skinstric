@@ -1,0 +1,127 @@
+.testing {
+  position: relative;
+  min-height: 100vh;
+}
+
+.testing__eyebrow {
+  position: absolute;
+  top: 84px;
+  left: 32px;
+  z-index: 2;
+  width: 240px;
+  height: 24px;
+  margin: 0;
+  color: rgba(26, 27, 28, 1);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: -0.32px;
+  text-transform: uppercase;
+}
+
+.testing__main {
+  position: relative;
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  overflow: hidden;
+}
+
+.testing__diamond {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 405px;
+  height: 405px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.testing__diamond-line {
+  --diamond-rotation: 45deg;
+  --diamond-scale: 0.72;
+  position: absolute;
+  inset: 0;
+  width: 405px;
+  height: 405px;
+  transform-origin: center;
+  animation-name: testingDiamondRotate;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.testing__diamond-line--one {
+  opacity: 0.42;
+  --diamond-rotation: 45deg;
+  --diamond-scale: 0.72;
+  animation-duration: 32s;
+}
+
+.testing__diamond-line--two {
+  opacity: 0.24;
+  --diamond-rotation: 25deg;
+  --diamond-scale: 0.88;
+  animation-duration: 40s;
+}
+
+.testing__diamond-line--three {
+  opacity: 0.16;
+  --diamond-rotation: 45deg;
+  --diamond-scale: 1;
+  animation-duration: 64s;
+}
+
+.testing__copy {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.testing__copy h1 {
+  margin: 0 0 16px;
+  color: rgba(26, 27, 28, 1);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
+  letter-spacing: -0.48px;
+}
+
+.testing__copy p {
+  margin: 0;
+  color: rgba(26, 27, 28, 0.65);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: -0.32px;
+}
+
+.testing__back-button {
+  position: absolute;
+  left: 32px;
+  bottom: 32px;
+  transform: scale(1.35);
+  transform-origin: bottom left;
+  font-size: 12px;
+  gap: 8px;
+}
+
+.testing__proceed-button {
+  position: absolute;
+  right: 32px;
+  bottom: 32px;
+  width: auto;
+  gap: 10px;
+  transform: scale(1.2);
+  transform-origin: bottom right;
+}
+
+@keyframes testingDiamondRotate {
+  from {
+    transform: rotate(var(--diamond-rotation)) scale(var(--diamond-scale));
+  }
+
+  to {
+    transform: rotate(calc(var(--diamond-rotation) + 360deg))
+      scale(var(--diamond-scale));
+  }
+}

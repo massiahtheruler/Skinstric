@@ -13,11 +13,13 @@
 }
 
 .site-header__logo {
+  color: rgba(26, 27, 28, 1);
   font-weight: 600;
   font-size: 14px;
   line-height: 16px;
   letter-spacing: -0.28px;
   text-transform: uppercase;
+  text-decoration: none;
 }
 
 .site-header__intro {

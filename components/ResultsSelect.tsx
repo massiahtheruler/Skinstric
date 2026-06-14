@@ -48,7 +48,7 @@ export default function ResultsSelect() {
             }`}
             aria-disabled={!tile.enabled}
             onClick={() => {
-              if (tile.enabled) router.push("/results/demographics");
+              if (tile.enabled) router.push("/summary");
             }}
           >
             <span>{tile.label}</span>
