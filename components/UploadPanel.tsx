@@ -31,8 +31,6 @@ const choices: Array<{
 export default function UploadPanel() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const streamRef = useRef<MediaStream | null>(null);
   const objectUrlRef = useRef<string | null>(null);
   const [selectedSource, setSelectedSource] = useState<UploadSource | null>(
     null,
@@ -48,14 +46,8 @@ export default function UploadPanel() {
     objectUrlRef.current = null;
   };
 
-  const stopCamera = () => {
-    streamRef.current?.getTracks().forEach((track) => track.stop());
-    streamRef.current = null;
-  };
-
   useEffect(() => {
     return () => {
-      stopCamera();
       revokePreview();
     };
   }, []);
@@ -64,17 +56,11 @@ export default function UploadPanel() {
     if (status !== "preparing") return;
 
     const timer = window.setTimeout(() => {
-      router.push("/testing");
-    }, 2000);
+      router.push(selectedSource === "camera" ? "/camera/capture" : "/testing");
+    }, selectedSource === "camera" ? 700 : 2000);
 
     return () => window.clearTimeout(timer);
-  }, [router, status]);
-
-  useEffect(() => {
-    if (!videoRef.current || !streamRef.current) return;
-
-    videoRef.current.srcObject = streamRef.current;
-  }, [status]);
+  }, [router, selectedSource, status]);
 
   const handleCameraClick = () => {
     setSelectedSource("camera");
@@ -90,36 +76,15 @@ export default function UploadPanel() {
   };
 
   const handleDenyCamera = () => {
-    stopCamera();
     setStatus("idle");
     setSelectedSource(null);
   };
 
-  const handleAllowCamera = async () => {
-    if (!navigator.mediaDevices?.getUserMedia) {
-      setStatus("error");
-      setErrorMessage("Camera access is not available in this browser.");
-      return;
-    }
-
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: "user",
-        },
-        audio: false,
-      });
-
-      stopCamera();
-      revokePreview();
-      streamRef.current = stream;
-      setPreviewUrl(null);
-      setSelectedSource("camera");
-      setStatus("preparing");
-    } catch {
-      setStatus("error");
-      setErrorMessage("Camera permission was blocked. Try gallery instead.");
-    }
+  const handleAllowCamera = () => {
+    revokePreview();
+    setPreviewUrl(null);
+    setSelectedSource("camera");
+    setStatus("preparing");
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -130,7 +95,6 @@ export default function UploadPanel() {
       return;
     }
 
-    stopCamera();
     revokePreview();
     const nextPreviewUrl = URL.createObjectURL(file);
     objectUrlRef.current = nextPreviewUrl;
@@ -145,16 +109,7 @@ export default function UploadPanel() {
       <div className="upload__preview" aria-live="polite">
         <p>Preview</p>
         <div className="upload__preview-frame">
-          {selectedSource === "camera" && status === "preparing" ? (
-            <video
-              ref={videoRef}
-              className="upload__preview-media"
-              autoPlay
-              muted
-              playsInline
-              aria-label="Camera preview"
-            />
-          ) : previewUrl ? (
+          {previewUrl ? (
             <span
               className="upload__preview-media"
               style={{ backgroundImage: `url(${previewUrl})` }}

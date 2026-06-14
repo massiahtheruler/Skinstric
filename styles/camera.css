@@ -1,0 +1,363 @@
+.camera {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: rgba(204, 205, 202, 1);
+}
+
+.camera .site-header {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 5;
+}
+
+.camera .site-header__logo,
+.camera .site-header__intro {
+  color: rgba(252, 252, 252, 1);
+}
+
+.camera .site-header__code-button {
+  background: rgba(26, 27, 28, 0.85);
+  color: rgba(252, 252, 252, 1);
+}
+
+.camera__stage {
+  position: relative;
+  height: 100vh;
+  min-height: 960px;
+  width: 100vw;
+  overflow: hidden;
+  background: rgba(204, 205, 202, 1);
+}
+
+.camera__media {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.camera__media--visible {
+  opacity: 1;
+}
+
+.camera__setup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  transform: translate(-50%, -50%);
+  color: rgba(26, 27, 28, 0.42);
+  text-align: center;
+}
+
+.camera__setup p {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: -0.28px;
+  text-transform: uppercase;
+}
+
+.camera__setup-diamond {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  pointer-events: none;
+}
+
+.camera__setup-line {
+  --diamond-rotation: 45deg;
+  --diamond-scale: 0.72;
+  position: absolute;
+  inset: 0;
+  width: 320px;
+  height: 320px;
+  transform-origin: center;
+  animation-name: cameraDiamondRotate;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.camera__setup-line--one {
+  opacity: 0.42;
+  --diamond-rotation: 45deg;
+  --diamond-scale: 0.72;
+  animation-duration: 28s;
+}
+
+.camera__setup-line--two {
+  opacity: 0.24;
+  --diamond-rotation: 25deg;
+  --diamond-scale: 0.88;
+  animation-duration: 36s;
+}
+
+.camera__setup-line--three {
+  opacity: 0.16;
+  --diamond-rotation: 45deg;
+  --diamond-scale: 1;
+  animation-duration: 54s;
+}
+
+.camera__take-action {
+  position: absolute;
+  top: 50%;
+  right: 32px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: rgba(252, 252, 252, 1);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  text-transform: uppercase;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.camera__shutter {
+  position: relative;
+  display: flex;
+  width: 64px;
+  height: 64px;
+  place-items: center;
+  border: 2px solid rgba(252, 252, 252, 1);
+  border-radius: 999px;
+  transition: transform 180ms ease;
+}
+
+.camera__take-action:hover .camera__shutter,
+.camera__take-action:focus-visible .camera__shutter {
+  transform: scale(1.08);
+}
+
+.camera__shutter-icon {
+  display: block;
+  width: 62px;
+  height: 62px;
+}
+
+.camera__tips {
+  position: absolute;
+  left: 50%;
+  bottom: 46px;
+  z-index: 3;
+  width: min(720px, calc(100vw - 64px));
+  color: rgba(252, 252, 252, 1);
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.camera__tips p {
+  margin: 0 0 22px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  text-transform: uppercase;
+}
+
+.camera__tips ul {
+  display: flex;
+  justify-content: center;
+  gap: 42px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.camera__tips li {
+  position: relative;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.camera__tips li::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  border: 1px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.camera__shot-message {
+  position: absolute;
+  top: 28%;
+  left: 50%;
+  z-index: 3;
+  margin: 0;
+  color: rgba(252, 252, 252, 1);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+}
+
+.camera__review {
+  position: absolute;
+  left: 50%;
+  top: 88%;
+  bottom: 32px;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transform: translateX(-50%);
+}
+
+.camera__analyzing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 4;
+  display: flex;
+  width: 188px;
+  height: 120px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  border-radius: 6px;
+  background: rgba(252, 252, 252, 0.58);
+  color: rgba(26, 27, 28, 0.72);
+  transform: translate(-50%, -50%);
+  backdrop-filter: blur(4px);
+}
+
+.camera__analyzing p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+  text-transform: uppercase;
+}
+
+.camera__analyzing .submit__processing-dots {
+  margin: 0;
+}
+
+.camera__review p {
+  margin: 0;
+  color: rgba(252, 252, 252, 1);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+}
+
+.camera__review-actions {
+  display: flex;
+  gap: 24px;
+}
+
+.camera__review-actions button {
+  min-width: 82px;
+  border: 0;
+  padding: 10px 18px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  cursor: pointer;
+}
+
+.camera__review-actions button:disabled {
+  cursor: wait;
+}
+
+.camera__review-actions button:first-child {
+  background: rgba(252, 252, 252, 1);
+  color: rgba(26, 27, 28, 0.72);
+}
+
+.camera__review-actions button:last-child {
+  background: rgba(26, 27, 28, 1);
+  color: rgba(252, 252, 252, 1);
+}
+
+.camera__back-button {
+  position: absolute;
+  left: 32px;
+  bottom: 32px;
+  z-index: 5;
+  width: auto;
+  gap: 10px;
+  color: rgba(252, 252, 252, 1);
+  transform: scale(1.2);
+  transform-origin: bottom left;
+}
+
+.camera__back-button .diamond-button__text,
+.camera__back-button .triangle-icon,
+.camera__back-button .triangle-icon__outline,
+.camera__back-button .triangle-icon__triangle {
+  color: rgba(252, 252, 252, 1);
+}
+
+.camera__back-button .triangle-icon__outline {
+  border-color: rgba(252, 252, 252, 1);
+}
+
+.camera__back-button .triangle-icon__triangle,
+.camera__back-button .triangle-icon--left .triangle-icon__triangle {
+  background: rgba(252, 252, 252, 1);
+}
+
+.camera__canvas {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .camera__stage {
+    min-height: 100vh;
+  }
+
+  .camera__take-action {
+    top: auto;
+    right: 24px;
+    bottom: 118px;
+  }
+
+  .camera__tips {
+    bottom: 34px;
+  }
+
+  .camera__tips ul {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .camera__review {
+    bottom: 104px;
+  }
+}
+
+@keyframes cameraDiamondRotate {
+  from {
+    transform: rotate(var(--diamond-rotation)) scale(var(--diamond-scale));
+  }
+
+  to {
+    transform: rotate(calc(var(--diamond-rotation) + 360deg))
+      scale(var(--diamond-scale));
+  }
+}

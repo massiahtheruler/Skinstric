@@ -59,9 +59,20 @@
 .results-select__outline {
   position: absolute;
   inset: 42px;
+  z-index: 0;
   border: 2px dotted rgba(160, 164, 171, 0.9);
-  transform: rotate(45deg);
+  opacity: 0;
   pointer-events: none;
+  transform: rotate(45deg) scale(0.72);
+  transform-origin: center;
+  transition:
+    transform 300ms ease,
+    opacity 300ms ease;
+}
+
+.results-select__grid:hover .results-select__outline {
+  opacity: 0.8;
+  transform: rotate(45deg) scale(1);
 }
 
 .results-select__tile {

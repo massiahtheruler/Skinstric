@@ -39,7 +39,7 @@
 
 .upload__preview {
   position: absolute;
-  top: 72px;
+  top: 40px;
   right: 40px;
   z-index: 3;
   color: rgba(26, 27, 28, 0.45);
