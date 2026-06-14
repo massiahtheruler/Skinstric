@@ -110,6 +110,11 @@ export default function SummaryDemographics() {
   const circumference = 2 * Math.PI * 174;
   const strokeOffset = circumference * (1 - meterValue / 100);
 
+  const handleReset = () => {
+    setActiveCategoryId("race");
+    setSelections(INITIAL_SELECTIONS);
+  };
+
   return (
     <>
       <main className="summary__main">
@@ -225,7 +230,7 @@ export default function SummaryDemographics() {
         className="reset"
         id="reset__button"
         type="button"
-        onClick={() => router.push("/analysis")}
+        onClick={handleReset}
       >
         RESET
       </button>
@@ -235,7 +240,7 @@ export default function SummaryDemographics() {
         type="button"
         onClick={() => router.push("/")}
       >
-        HOME
+        RESTART
       </button>
     </>
   );
