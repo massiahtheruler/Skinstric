@@ -1,9 +1,16 @@
 "use client";
 
-import { type CSSProperties, useMemo, useState } from "react";
+import { type CSSProperties, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  ANALYSIS_STORAGE_KEY,
+  type AnalysisCategory,
+  type AnalysisResult,
+  formatAnalysisLabel,
+  sampleAnalysis,
+} from "@/lib/skinstricAnalysis";
 
-type CategoryId = "race" | "age" | "sex";
+type CategoryId = AnalysisCategory;
 
 type DemographicOption = {
   id: string;
@@ -17,65 +24,39 @@ type CategoryConfig = {
   options: DemographicOption[];
 };
 
-const DEMOGRAPHIC_DATA: CategoryConfig[] = [
-  {
-    id: "race",
-    label: "RACE",
-    options: [
-      { id: "black", label: "Black", value: 0.11956584717786628 },
-      { id: "white", label: "White", value: 0.1280179046276461 },
-      {
-        id: "southeast-asian",
-        label: "Southeast Asian",
-        value: 0.06297961651829671,
-      },
-      { id: "south-asian", label: "South Asian", value: 0.1425984353728242 },
-      {
-        id: "latino-hispanic",
-        label: "Latino Hispanic",
-        value: 0.0619650872094126,
-      },
-      { id: "east-asian", label: "East Asian", value: 0.2525825951799374 },
-      {
-        id: "middle-eastern",
-        label: "Middle Eastern",
-        value: 0.23229411391401664,
-      },
-    ],
-  },
-  {
-    id: "age",
-    label: "AGE",
-    options: [
-      { id: "20-29", label: "20-29", value: 0.031678993030692736 },
-      { id: "30-39", label: "30-39", value: 0.14951751927400894 },
-      { id: "40-49", label: "40-49", value: 0.21423285073736906 },
-      { id: "10-19", label: "10-19", value: 0.060884420054723574 },
-      { id: "50-59", label: "50-59", value: 0.14185781411091578 },
-      { id: "3-9", label: "3-9", value: 0.11754071465957916 },
-      { id: "60-69", label: "60-69", value: 0.0640062076182385 },
-      { id: "70+", label: "70+", value: 0.10014548458462194 },
-      { id: "0-2", label: "0-2", value: 0.12013599592985022 },
-    ],
-  },
-  {
-    id: "sex",
-    label: "SEX",
-    options: [
-      { id: "male", label: "Male", value: 0.520499217733165 },
-      { id: "female", label: "Female", value: 0.47950078226683496 },
-    ],
-  },
-];
-
-const INITIAL_SELECTIONS: Record<CategoryId, string> = {
-  race: "east-asian",
-  age: "20-29",
-  sex: "female",
+const CATEGORY_LABELS: Record<CategoryId, string> = {
+  race: "RACE",
+  age: "AGE",
+  sex: "SEX",
 };
 
-function formatPercent(value: number) {
-  return `${Math.round(value * 100)}%`;
+const CATEGORY_ORDER: CategoryId[] = ["race", "age", "sex"];
+
+function buildCategoryData(analysis: AnalysisResult): CategoryConfig[] {
+  return CATEGORY_ORDER.map((id) => ({
+    id,
+    label: CATEGORY_LABELS[id],
+    options: Object.entries(analysis[id]).map(([optionId, value]) => ({
+      id: optionId,
+      label: formatAnalysisLabel(optionId),
+      value,
+    })),
+  }));
+}
+
+function getInitialSelections(categories: CategoryConfig[]) {
+  return categories.reduce(
+    (selections, category) => {
+      const highest = [...category.options].sort((a, b) => b.value - a.value)[0];
+      selections[category.id] = highest.id;
+      return selections;
+    },
+    {} as Record<CategoryId, string>,
+  );
+}
+
+function formatPercent(value: number, decimals = 0) {
+  return `${(value * 100).toFixed(decimals)}%`;
 }
 
 function getHeroTitle(categoryId: CategoryId, label: string) {
@@ -86,13 +67,43 @@ function getHeroTitle(categoryId: CategoryId, label: string) {
   return label;
 }
 
+const fallbackCategoryData = buildCategoryData(sampleAnalysis);
+
 export default function SummaryDemographics() {
   const router = useRouter();
+  const [categoryData, setCategoryData] =
+    useState<CategoryConfig[]>(fallbackCategoryData);
   const [activeCategoryId, setActiveCategoryId] = useState<CategoryId>("race");
-  const [selections, setSelections] =
-    useState<Record<CategoryId, string>>(INITIAL_SELECTIONS);
+  const [selections, setSelections] = useState<Record<CategoryId, string>>(() =>
+    getInitialSelections(fallbackCategoryData),
+  );
 
-  const activeCategory = DEMOGRAPHIC_DATA.find(
+  useEffect(() => {
+    let isMounted = true;
+    const storedAnalysis = localStorage.getItem(ANALYSIS_STORAGE_KEY);
+    if (!storedAnalysis) return undefined;
+
+    queueMicrotask(() => {
+      if (!isMounted) return;
+
+      try {
+        const parsedAnalysis = JSON.parse(storedAnalysis) as AnalysisResult;
+        const nextCategoryData = buildCategoryData(parsedAnalysis);
+
+        setCategoryData(nextCategoryData);
+        setSelections(getInitialSelections(nextCategoryData));
+        setActiveCategoryId("race");
+      } catch {
+        localStorage.removeItem(ANALYSIS_STORAGE_KEY);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const activeCategory = categoryData.find(
     (category) => category.id === activeCategoryId,
   )!;
 
@@ -112,14 +123,14 @@ export default function SummaryDemographics() {
 
   const handleReset = () => {
     setActiveCategoryId("race");
-    setSelections(INITIAL_SELECTIONS);
+    setSelections(getInitialSelections(categoryData));
   };
 
   return (
     <>
       <main className="summary__main">
         <section className="summary__tiles" aria-label="Demographic groups">
-          {DEMOGRAPHIC_DATA.map((category) => {
+          {categoryData.map((category) => {
             const selectedOption = category.options.find(
               (option) => option.id === selections[category.id],
             )!;
@@ -215,7 +226,7 @@ export default function SummaryDemographics() {
                     <span className="demo__option-diamond" aria-hidden="true" />
                     {option.label}
                   </span>
-                  <span>{formatPercent(option.value)}</span>
+                  <span>{formatPercent(option.value, 2)}</span>
                 </button>
               );
             })}

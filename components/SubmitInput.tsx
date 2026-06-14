@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { PROFILE_STORAGE_KEY } from "@/lib/skinstricAnalysis";
 
 const submitSteps = [
   { label: "CLICK TO TYPE", placeholder: "Introduce Yourself" },
@@ -13,31 +14,63 @@ export default function SubmitInput() {
   const [step, setStep] = useState(0);
   const [inputValue, setInputValue] = useState("");
   const [status, setStatus] = useState<"typing" | "processing">("typing");
+  const [errorMessage, setErrorMessage] = useState("");
   const answersRef = useRef<string[]>([]);
 
   const currentStep = submitSteps[step];
 
-  useEffect(() => {
-    if (status !== "processing") return;
+  const isValidAnswer = (answer: string) =>
+    answer.length > 0 && !/\d/.test(answer) && /^[a-zA-Z\s'.-]+$/.test(answer);
 
-    const processingTimer = window.setTimeout(() => {
-      router.push("/analysis");
-    }, 1600);
-
-    return () => window.clearTimeout(processingTimer);
-  }, [router, status]);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const answer = inputValue.trim();
-    if (!answer || status !== "typing") return;
+    if (status !== "typing") return;
+
+    if (!isValidAnswer(answer)) {
+      setErrorMessage("Use letters only here.");
+      return;
+    }
 
     answersRef.current[step] = answer;
     setInputValue("");
+    setErrorMessage("");
 
     if (step === submitSteps.length - 1) {
       setStatus("processing");
+      const [name, location] = answersRef.current;
+
+      try {
+        const response = await fetch("/api/profile", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, location }),
+        });
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok) {
+          throw new Error(data?.error ?? "Profile submission failed.");
+        }
+
+        localStorage.setItem(
+          PROFILE_STORAGE_KEY,
+          JSON.stringify({ name, location, response: data }),
+        );
+
+        window.setTimeout(() => {
+          router.push("/analysis");
+        }, 1200);
+      } catch (error) {
+        setStatus("typing");
+        setStep(submitSteps.length - 1);
+        setInputValue(location ?? "");
+        setErrorMessage(
+          error instanceof Error ? error.message : "Profile submission failed.",
+        );
+      }
       return;
     }
 
@@ -72,6 +105,11 @@ export default function SubmitInput() {
           aria-label={currentStep.placeholder}
         />
       </h1>
+      {errorMessage && (
+        <p className="submit__input-error" role="alert">
+          {errorMessage}
+        </p>
+      )}
     </form>
   );
 }

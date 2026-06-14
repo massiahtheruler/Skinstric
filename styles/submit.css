@@ -86,6 +86,15 @@
   color: rgb(126, 127, 129);
 }
 
+.submit__input-error {
+  margin: 16px 0 0;
+  color: rgba(26, 27, 28, 0.62);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  text-transform: uppercase;
+}
+
 .submit__processing-text {
   font-weight: 400;
   font-size: 18px;

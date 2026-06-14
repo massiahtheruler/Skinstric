@@ -3,6 +3,10 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import {
+  ANALYSIS_STORAGE_KEY,
+  dataUrlToBase64,
+} from "@/lib/skinstricAnalysis";
 import Rectangle from "./Rectangle";
 
 type UploadSource = "camera" | "gallery";
@@ -54,10 +58,11 @@ export default function UploadPanel() {
 
   useEffect(() => {
     if (status !== "preparing") return;
+    if (selectedSource !== "camera") return;
 
     const timer = window.setTimeout(() => {
-      router.push(selectedSource === "camera" ? "/camera/capture" : "/testing");
-    }, selectedSource === "camera" ? 700 : 2000);
+      router.push("/camera/capture");
+    }, 700);
 
     return () => window.clearTimeout(timer);
   }, [router, selectedSource, status]);
@@ -102,6 +107,53 @@ export default function UploadPanel() {
     setSelectedSource("gallery");
     setStatus("preparing");
     event.target.value = "";
+
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+      const result = reader.result;
+      if (typeof result !== "string") {
+        setStatus("error");
+        setErrorMessage("Could not read that image. Try another file.");
+        return;
+      }
+
+      try {
+        const response = await fetch("/api/skin-analysis", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ Image: dataUrlToBase64(result) }),
+        });
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok) {
+          throw new Error(data?.error ?? "Image analysis failed.");
+        }
+
+        localStorage.setItem(
+          ANALYSIS_STORAGE_KEY,
+          JSON.stringify(data.normalizedData),
+        );
+
+        window.setTimeout(() => {
+          router.push("/testing");
+        }, 1200);
+      } catch (error) {
+        setStatus("error");
+        setErrorMessage(
+          error instanceof Error ? error.message : "Image analysis failed.",
+        );
+      }
+    };
+
+    reader.onerror = () => {
+      setStatus("error");
+      setErrorMessage("Could not read that image. Try another file.");
+    };
+
+    reader.readAsDataURL(file);
   };
 
   return (

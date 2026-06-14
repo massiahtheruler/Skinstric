@@ -3,6 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import {
+  ANALYSIS_STORAGE_KEY,
+  dataUrlToBase64,
+} from "@/lib/skinstricAnalysis";
 import Rectangle from "./Rectangle";
 
 type CameraStatus = "setting-up" | "ready" | "captured" | "error";
@@ -99,14 +103,41 @@ export default function CameraCapture() {
     setStatus("ready");
   };
 
-  const handleUsePhoto = () => {
+  const handleUsePhoto = async () => {
     if (isAnalyzing) return;
+    if (!photoUrl) return;
 
     setIsAnalyzing(true);
-    stopCamera();
-    analyzeTimerRef.current = window.setTimeout(() => {
-      router.push("/results");
-    }, 900);
+
+    try {
+      const response = await fetch("/api/skin-analysis", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ Image: dataUrlToBase64(photoUrl) }),
+      });
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(data?.error ?? "Image analysis failed.");
+      }
+
+      localStorage.setItem(
+        ANALYSIS_STORAGE_KEY,
+        JSON.stringify(data.normalizedData),
+      );
+
+      stopCamera();
+      analyzeTimerRef.current = window.setTimeout(() => {
+        router.push("/results");
+      }, 900);
+    } catch (error) {
+      setIsAnalyzing(false);
+      setErrorMessage(
+        error instanceof Error ? error.message : "Image analysis failed.",
+      );
+    }
   };
 
   return (
@@ -187,6 +218,11 @@ export default function CameraCapture() {
                 <span />
               </div>
             </div>
+          )}
+          {!isAnalyzing && errorMessage && (
+            <p className="camera__capture-error" role="alert">
+              {errorMessage}
+            </p>
           )}
           <div className="camera__review">
             <p>Preview</p>
