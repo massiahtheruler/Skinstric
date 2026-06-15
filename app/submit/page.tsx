@@ -8,7 +8,7 @@ export default function SubmitPage() {
     <div className="submit">
       <Header showCodeButton={true} />
       <p className="submit__eyebrow">TO START YOUR ANALYSIS</p>
-      <main className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
+      <main className="submit__main flex min-h-screen flex-col items-center justify-center px-6 text-center">
         <div className="diamond-stack submit__diamond-stack">
           <Rectangle
             className="diamond-stack__line diamond-stack__line--one"

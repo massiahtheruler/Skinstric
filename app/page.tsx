@@ -240,6 +240,19 @@ export default function Home() {
             </span>
           </h1>
           <div
+            className="diamond-stack home__diamond-stack home__diamond-stack--center"
+            aria-hidden="true"
+          >
+            <Rectangle
+              className="diamond-stack__line diamond-stack__line--center-one"
+              dashed
+            />
+            <Rectangle
+              className="diamond-stack__line diamond-stack__line--center-two"
+              dashed
+            />
+          </div>
+          <div
             className="diamond-stack home__diamond-stack home__diamond-stack--right"
             ref={rightStackRef}
           >
@@ -263,6 +276,13 @@ export default function Home() {
             onClick={() => router.push("/submit")}
           >
             TAKE TEST
+          </DiamondButton>
+          <DiamondButton
+            className="home__cta home__cta--center"
+            iconSide="right"
+            onClick={() => router.push("/submit")}
+          >
+            ENTER EXPERIENCE
           </DiamondButton>
           <p className="home__description">
             Skinstric developed an A.I. that creates a highly-personalised
