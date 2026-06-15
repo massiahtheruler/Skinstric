@@ -2,6 +2,7 @@
 
 import { type CSSProperties, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import DiamondButton from "@/components/DiamondButton";
 import {
   ANALYSIS_STORAGE_KEY,
   type AnalysisCategory,
@@ -121,9 +122,13 @@ export default function SummaryDemographics() {
   const circumference = 2 * Math.PI * 174;
   const strokeOffset = circumference * (1 - meterValue / 100);
 
-  const handleReset = () => {
-    setActiveCategoryId("race");
-    setSelections(getInitialSelections(categoryData));
+  const handleBack = () => {
+    if (window.history.length > 1) {
+      router.back();
+      return;
+    }
+
+    router.push("/results");
   };
 
   return (
@@ -152,48 +157,56 @@ export default function SummaryDemographics() {
           })}
         </section>
 
-        <section className="demo__hero" aria-live="polite">
+        <section
+          className="demo__hero"
+          aria-label={`${activeOption.label} confidence result`}
+          aria-live="polite"
+        >
           <h2 className="demo__hero-title">
             {getHeroTitle(activeCategoryId, activeOption.label)}
           </h2>
-        </section>
 
-        <div
-          className="summary__meter"
-          style={
-            {
-              "--meter-circumference": circumference,
-              "--meter-offset": strokeOffset,
-            } as CSSProperties
-          }
-          aria-label={`${activeOption.label} confidence ${formatPercent(
-            activeOption.value,
-          )}`}
-        >
-          <svg
-            className="summary__meter-ring"
-            width="384"
-            height="384"
-            viewBox="0 0 384 384"
-            aria-hidden="true"
+          <div
+            className="summary__meter"
+            style={
+              {
+                "--meter-circumference": circumference,
+                "--meter-offset": strokeOffset,
+              } as CSSProperties
+            }
+            aria-label={`${activeOption.label} confidence ${formatPercent(
+              activeOption.value,
+            )}`}
           >
-            <circle
-              className="summary__meter-track"
-              cx="192"
-              cy="192"
-              r="174"
-            />
-            <circle
-              className="summary__meter-progress"
-              cx="192"
-              cy="192"
-              r="174"
-            />
-          </svg>
-          <span className="summary__meter-value">
-            {formatPercent(activeOption.value)}
-          </span>
-        </div>
+            <svg
+              className="summary__meter-ring"
+              width="384"
+              height="384"
+              viewBox="0 0 384 384"
+              aria-hidden="true"
+            >
+              <circle
+                className="summary__meter-track"
+                cx="192"
+                cy="192"
+                r="174"
+              />
+              <circle
+                className="summary__meter-progress"
+                cx="192"
+                cy="192"
+                r="174"
+              />
+            </svg>
+            <span className="summary__meter-value">
+              {formatPercent(activeOption.value)}
+            </span>
+          </div>
+
+          <p className="summary__statement">
+            If A.I. estimate is wrong, select the correct one.
+          </p>
+        </section>
 
         <section
           className="demo__options"
@@ -234,25 +247,23 @@ export default function SummaryDemographics() {
         </section>
       </main>
 
-      <div className="summary__statement">
-        If A.I. estimate is wrong, select the correct one.
-      </div>
-      <button
-        className="reset"
-        id="reset__button"
-        type="button"
-        onClick={handleReset}
-      >
-        RESET
-      </button>
-      <button
-        className="confirm"
-        id="confirm__button"
-        type="button"
-        onClick={() => router.push("/")}
-      >
-        RESTART
-      </button>
+      <footer className="summary__footer" aria-label="Summary navigation">
+        <DiamondButton
+          type="button"
+          className="summary__footer-button summary__footer-button--back"
+          onClick={handleBack}
+        >
+          BACK
+        </DiamondButton>
+        <DiamondButton
+          type="button"
+          iconSide="right"
+          className="summary__footer-button summary__footer-button--home"
+          onClick={() => router.push("/")}
+        >
+          HOME
+        </DiamondButton>
+      </footer>
     </>
   );
 }

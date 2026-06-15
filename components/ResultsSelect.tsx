@@ -62,7 +62,8 @@ export default function ResultsSelect() {
         iconSide="right"
         onClick={() => router.push("/summary")}
       >
-        GET SUMMARY
+        <span className="results-select__summary-prefix">GET </span>
+        SUMMARY
       </DiamondButton>
     </section>
   );

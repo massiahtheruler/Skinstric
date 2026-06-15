@@ -88,6 +88,28 @@
   color: rgb(126, 127, 129);
 }
 
+.submit__input-complete {
+  animation: submitCompleteIn 560ms ease both;
+}
+
+.submit__complete-title {
+  margin: 0 0 16px;
+  color: rgba(26, 27, 28, 1);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
+  letter-spacing: -0.48px;
+}
+
+.submit__complete-text {
+  margin: 0;
+  color: rgba(26, 27, 28, 0.65);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: -0.32px;
+}
+
 .submit__input-error {
   margin: 16px 0 0;
   color: rgba(26, 27, 28, 0.62);
@@ -141,10 +163,17 @@
   right: 32px;
   bottom: 32px;
   width: auto;
-  gap: 10px;
-  transform: scale(1.2);
+  gap: 8px;
+  opacity: 0;
+  transform: translateX(-28px) scale(1.35);
   transform-origin: bottom right;
   color: rgba(26, 27, 28, 1);
+  pointer-events: none;
+}
+
+.submit__proceed-button--visible {
+  animation: submitProceedIn 560ms ease 80ms both;
+  pointer-events: auto;
 }
 
 .submit__diamond-stack {
@@ -212,6 +241,30 @@
   40% {
     transform: translateY(-5px);
     opacity: 1;
+  }
+}
+
+@keyframes submitCompleteIn {
+  from {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes submitProceedIn {
+  from {
+    opacity: 0;
+    transform: translateX(-28px) scale(1.35);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1.35);
   }
 }
 

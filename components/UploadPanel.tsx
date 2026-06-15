@@ -138,7 +138,7 @@ export default function UploadPanel() {
         );
 
         window.setTimeout(() => {
-          router.push("/testing");
+          router.push("/results");
         }, 1200);
       } catch (error) {
         setStatus("error");

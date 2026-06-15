@@ -140,8 +140,8 @@
   right: 32px;
   bottom: 32px;
   width: auto;
-  gap: 10px;
-  transform: scale(1.2);
+  gap: 8px;
+  transform: scale(1.35);
   transform-origin: bottom right;
 }
 
@@ -208,5 +208,11 @@
   .results-select__tile--right {
     top: 111px;
     right: 40px;
+  }
+}
+
+@media (max-width: 430px) {
+  .results-select__summary-prefix {
+    display: none;
   }
 }

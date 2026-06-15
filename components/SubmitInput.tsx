@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PROFILE_STORAGE_KEY } from "@/lib/skinstricAnalysis";
+import DiamondButton from "./DiamondButton";
 
 const submitSteps = [
   { label: "CLICK TO TYPE", placeholder: "Introduce Yourself" },
@@ -13,7 +14,9 @@ export default function SubmitInput() {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [inputValue, setInputValue] = useState("");
-  const [status, setStatus] = useState<"typing" | "processing">("typing");
+  const [status, setStatus] = useState<"typing" | "processing" | "complete">(
+    "typing",
+  );
   const [errorMessage, setErrorMessage] = useState("");
   const answersRef = useRef<string[]>([]);
 
@@ -61,7 +64,7 @@ export default function SubmitInput() {
         );
 
         window.setTimeout(() => {
-          router.push("/analysis");
+          setStatus("complete");
         }, 1200);
       } catch (error) {
         setStatus("typing");
@@ -87,6 +90,25 @@ export default function SubmitInput() {
           <span />
         </div>
       </div>
+    );
+  }
+
+  if (status === "complete") {
+    return (
+      <>
+        <div className="submit__input-complete" aria-live="polite">
+          <h1 className="submit__complete-title">Thank you!</h1>
+          <p className="submit__complete-text">Proceed for the next step</p>
+        </div>
+        <DiamondButton
+          type="button"
+          className="submit__proceed-button submit__proceed-button--visible"
+          iconSide="right"
+          onClick={() => router.push("/analysis")}
+        >
+          PROCEED
+        </DiamondButton>
+      </>
     );
   }
 

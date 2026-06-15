@@ -367,6 +367,16 @@
   }
 }
 
+@media (max-width: 500px) {
+  .camera__back-button .diamond-button__text {
+    display: none;
+  }
+
+  .camera__back-button {
+    gap: 0;
+  }
+}
+
 @keyframes cameraDiamondRotate {
   from {
     transform: rotate(var(--diamond-rotation)) scale(var(--diamond-scale));
